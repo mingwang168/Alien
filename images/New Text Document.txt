@@ -1,0 +1,1 @@
+parseInt(Alien.style.bottom)>parseInt(Middlebox.style.bottom) +66 && parseInt(Alien.style.bottom)<parseInt(Middlebox.style.bottom) +96 && parseInt(Alien.style.left)>parseInt(Middlebox.style.left)-10 && parseInt(Alien.style.left)<parseInt(Middlebox.style.left)+70

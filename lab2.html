@@ -1,0 +1,181 @@
+<html>
+
+<head>
+    <script>
+        let interval = null
+        let interval1 = null
+        let interval2 = null
+        let jum = null
+        goRight = true
+        goUp = true
+        stepCounter = 0
+        smallBoxMoveRight = true
+        function stepRight() {
+            stepCounter++
+            stepCounter %= 30
+            Alien.src = "images/alien/alienrwalk" + stepCounter + ".gif"
+        }
+        function stepLeft() {
+            stepCounter++
+            stepCounter %= 30
+            Alien.src = "images/alien/alienlwalk" + stepCounter + ".gif"
+        }
+        function walk() {
+            Alien.onmouseover = jumped;
+            if (parseInt(Alien.style.left) + 86 === parseInt(Smallbox.style.left) && goRight === true) {
+                if (interval2 === null) {
+                    interval2 = setInterval(boxMoveRight, 20);
+                }
+                smallBoxLocation = parseInt(Smallbox.style.left)
+            } else if (parseInt(Alien.style.left) === parseInt(Smallbox.style.left) + 20 && goRight === false) {
+                if (interval2 === null) {
+                    interval2 = setInterval(boxMoveLeft, 20);
+                }
+                smallBoxLocation = parseInt(Smallbox.style.left)
+            }
+
+                if ((parseInt(Alien.style.left)+96< parseInt(Middlebox.style.left)  && goRight === true) || (parseInt(Alien.style.left) +96>=parseInt(Middlebox.style.left) +2 && parseInt(Alien.style.left) < parseInt(Bigbox.style.left) - 66 && goRight === true)) {
+                stepRight();
+                Alien.style.left = parseInt(Alien.style.left) + 1 + "px";
+            }
+            else {
+                goRight = false
+                if ((parseInt(Alien.style.left) > 0 && parseInt(Alien.style.left) <= parseInt(Middlebox.style.left)+64) || ((parseInt(Alien.style.left)> parseInt(Middlebox.style.left) + 66 && parseInt(Alien.style.left) <= parseInt(Bigbox.style.left) - 60))) {
+                    Alien.style.left = parseInt(Alien.style.left) - 1 + "px";
+                    stepLeft();
+                } else {
+                    goRight = true;
+
+                }
+            }
+            }
+
+        function boxMoveRight() {
+            if (parseInt(Smallbox.style.left) < (smallBoxLocation + 100) && parseInt(Smallbox.style.left) < parseInt(Middlebox.style.left) - 40) {
+                Smallbox.style.left = parseInt(Smallbox.style.left) + 10 + "px"
+            } else {
+                clearInterval(interval2)
+                interval2 = null
+            }
+        }
+        function boxMoveLeft() {
+            if (parseInt(Smallbox.style.left) > (smallBoxLocation - 100) && parseInt(Smallbox.style.left) > 10) {
+                Smallbox.style.left = parseInt(Smallbox.style.left) - 10 + "px"
+            } else {
+                clearInterval(interval2)
+                interval2 = null
+            }
+        }
+        function clicked() {
+            if (interval === null) {
+                interval = setInterval(walk, 16)
+            } else {
+                clearInterval(interval)
+                interval = null
+            }
+        }
+        function jump() {
+            Alien.onclick = false;
+            Alien.onmouseover = false;
+            clearInterval(interval)
+            interval = null
+            clearInterval(interval2)
+            interval2 = null
+            if (parseInt(Middlebox.style.height) > 60) {
+                if (goRight === true && parseInt(Alien.style.left)< parseInt(Middlebox.style.left)) {
+                Alien.style.left = parseInt(Alien.style.left) + 3 + "px"
+            } else if (parseInt(Alien.style.left) > 0) {
+                Alien.style.left = parseInt(Alien.style.left) - 3 + "px"
+            }
+            }
+            if(parseInt(Middlebox.style.height) < 60){
+                if (goRight === true && parseInt(Alien.style.left)+96< parseInt(Bigbox.style.left)) {
+                Alien.style.left = parseInt(Alien.style.left) + 3 + "px"
+            } else if (parseInt(Alien.style.left) > 0) {
+                Alien.style.left = parseInt(Alien.style.left) - 3 + "px"
+            }
+            }
+
+            if (parseInt(Alien.style.bottom) < 400 && goUp == true) {
+                Alien.style.bottom = parseInt(Alien.style.bottom) + 3 + "px"
+            } else {
+                goUp = false
+                if (parseInt(Alien.style.bottom) > 300) {
+                    if (parseInt(Alien.style.bottom) > parseInt(Smallbox.style.bottom) + 15 && parseInt(Alien.style.bottom) < parseInt(Smallbox.style.bottom) + 28 && parseInt(Alien.style.left) > parseInt(Smallbox.style.left) - 50 && parseInt(Alien.style.left) < parseInt(Smallbox.style.left) + 6) {
+                        clearInterval(interval)
+                        interval = null
+                        clearInterval(interval2)
+                        interval2 = null
+                        clearInterval(interval1)
+                        interval1 = null
+                        Smallbox.src = "images/explosion.gif"
+                        setTimeout("Alien.style.bottom=300+'px'", 500)
+                        setTimeout("Smallbox.style.visibility = 'hidden'", 2000)
+                        clicked()
+                    } else {
+                        Alien.style.bottom = parseInt(Alien.style.bottom) - 3 + "px"
+                    }
+
+                    if (parseInt(Alien.style.bottom) > parseInt(Middlebox.style.bottom) + 50 && parseInt(Alien.style.bottom) < parseInt(Middlebox.style.bottom) + 53 && parseInt(Alien.style.left) > parseInt(Middlebox.style.left) - 55 && parseInt(Alien.style.left) < parseInt(Middlebox.style.left) + 16) {
+                        clearInterval(interval)
+                        interval = null
+                        clearInterval(interval1)
+                        interval1 = null
+                        setInterval(middleBoxSquish, 40)
+                        setTimeout("clicked()", 800)
+                        setTimeout("Alien.style.bottom=300+'px'", 1300)
+                    } else {
+                        Alien.style.bottom = parseInt(Alien.style.bottom) - 3 + "px"
+                    }
+                } else {
+                    goUp = true
+
+                    clearInterval(interval1)
+                    interval1 = null
+                    clicked()
+                }
+            }
+        }
+
+        function jumped() {
+            if (interval1 === null) {
+                interval1 = setInterval(jump, 18);
+
+            } else {
+                clearInterval(interval1)
+                interval1 = null
+            }
+        }
+        function middleBoxSquish() {
+            if (parseInt(Middlebox.style.height) > 33) {
+                Middlebox.style.height = parseInt(Middlebox.style.height) - 1 + "px"
+                Alien.style.bottom = parseInt(Alien.style.bottom) - 1 + "px"
+            }
+
+        }
+
+        onload = function () {
+            Bigbox = document.getElementById('B')
+            Smallbox = document.getElementById('C')
+            Middlebox = document.getElementById('D')
+            Alien = document.getElementById('A')
+            //           clicked()
+            smallBoxLocation = parseInt(Smallbox.style.left)
+            Alien.onclick = clicked;
+            //       Alien.onmouseover = jumped;
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+
+    <img src="images/alien/alienrwalk1.gif" id="A" style="position:absolute;left:10px;bottom: 300px;">
+    <img src="images/Box.png" id="B" style="position:absolute;left:1120px;bottom: 300px;width: 100px;">
+    <img src="images/Box.png" id="C" style="position:absolute;left:500px;bottom: 300px;width: 40px;">
+    <img src="images/Box.png" id="D" style="position:absolute;left:800px;bottom: 300px;width: 66px; height: 66px;">
+</body>
+
+</html>
